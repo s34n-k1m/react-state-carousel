@@ -46,7 +46,7 @@ it("works when you click on the right arrow", function() {
 });
 
 it("works when you click on the left arrow", function() {
-  const { queryByTestId, queryByAltText, container, debug } = render(<Carousel />);
+  const { queryByTestId, queryByAltText } = render(<Carousel />);
   const rightArrow = queryByTestId("right-arrow");
   const leftArrow = queryByTestId("left-arrow");
 
@@ -62,4 +62,27 @@ it("works when you click on the left arrow", function() {
   expect(queryByAltText("Photo by Richard Pasquarella on Unsplash")).toBeInTheDocument();
   expect(queryByAltText("Photo by Pratik Patel on Unsplash")).not.toBeInTheDocument();
 
+});
+
+it("should hide left arrow on first image", function () {
+  const { queryByTestId, debug } = render(<Carousel />);
+  debug();
+  const leftArrow = queryByTestId("left-arrow");
+  const rightArrow = queryByTestId("right-arrow");
+  
+  expect(leftArrow.getAttribute("style")).toEqual("visibility: hidden;");
+  expect(rightArrow.getAttribute("style")).toEqual("visibility: visible;");
+});
+
+it("should hide right arrow on last image", function () {
+  const { queryByTestId, debug } = render(<Carousel />);
+  debug();
+  const leftArrow = queryByTestId("left-arrow");
+  const rightArrow = queryByTestId("right-arrow");
+  
+  fireEvent.click(rightArrow);
+  fireEvent.click(rightArrow);
+
+  expect(rightArrow.getAttribute("style")).toEqual("visibility: hidden;");
+  expect(leftArrow.getAttribute("style")).toEqual("visibility: visible;");
 });
